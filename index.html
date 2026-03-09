@@ -168,11 +168,25 @@ function buildChips(){
 buildChips();
 
 function toggleFmt(f){
-  if(selFmt.has(f)){ if(selFmt.size>1) selFmt.delete(f); } else selFmt.add(f);
+  const isOnlyOne = selFmt.size===1 && selFmt.has(f);
+  if(isOnlyOne){
+    // unico activo -> deseleccionar: volver a TODOS
+    selFmt = new Set(D.formatos);
+  } else {
+    // seleccionar SOLO este
+    selFmt = new Set([f]);
+  }
   buildChips(); refreshAll();
 }
 function toggleCanal(c){
-  if(selCanal.has(c)){ if(selCanal.size>1) selCanal.delete(c); } else selCanal.add(c);
+  const isOnlyOne = selCanal.size===1 && selCanal.has(c);
+  if(isOnlyOne){
+    // unico activo -> deseleccionar: volver a TODOS
+    selCanal = new Set(D.canales);
+  } else {
+    // seleccionar SOLO este
+    selCanal = new Set([c]);
+  }
   buildChips(); refreshAll();
 }
 
@@ -223,7 +237,7 @@ function sumPNL(arrays){
 }
 
 // ---- Accuracy ----
-const fm = (v,d=2)=> v==null?'—':v.toLocaleString('es-CL',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fm = (v,d=3)=> v==null?'—':v.toLocaleString('es-CL',{minimumFractionDigits:d,maximumFractionDigits:d});
 function calcAcc(valor,plan){ return (plan!=null&&plan!==0&&valor!=null) ? valor/plan : null; }
 function fmtAcc(acc){ if(acc==null) return 'N/D'; return (acc*100).toFixed(1)+'%'; }
 function accCls(acc, agr){
